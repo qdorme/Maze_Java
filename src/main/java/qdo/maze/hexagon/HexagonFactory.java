@@ -25,7 +25,9 @@ public class HexagonFactory extends MazeFactory {
                     }
                     Cell cellNeighbour = currentCell.getNeighbour(position);
                     cells.makeAcquaintance(aboveCell, cellNeighbour);
-                }catch (InvalidDirectionException e){}
+                }catch (InvalidDirectionException e){
+                    // this exception is normal if we are a extrem places
+                }
             }
         });
     }

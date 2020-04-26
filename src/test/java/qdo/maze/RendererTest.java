@@ -148,7 +148,7 @@ public class RendererTest {
 
     }
 
-    @Test
+    //@Test
     public void produce_my_path_image() throws IOException {
 
         MazeFactory factory = new HexagonFactory();
