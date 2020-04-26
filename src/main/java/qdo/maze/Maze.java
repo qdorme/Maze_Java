@@ -24,7 +24,7 @@ public abstract class Maze {
         return renderer.drawMaze(this);
     }
 
-    public void generate() {
+    public Maze generate() {
         for (int i = 0; i < cells.all().size(); i++) {
             if(!cells.getCurrentCell().hasUnvisitedNeighbour()){
                 Optional<Cell> choosenOne = changeCurrentcell();
@@ -38,6 +38,7 @@ public abstract class Maze {
             Cell choosenCell = unvisitedNeighbour.get(ThreadLocalRandom.current().nextInt(unvisitedNeighbour.size()));
             cells.createPath(choosenCell);
         }
+        return this;
     }
 
     private Optional<Cell> changeCurrentcell() {
