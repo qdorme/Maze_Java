@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage;
 
 import static java.util.Objects.requireNonNull;
 
-public class HexagonRenderer extends Renderer {
+public class HexagonRenderer implements Renderer {
 
     @Override
     public BufferedImage drawMaze(Maze maze) {

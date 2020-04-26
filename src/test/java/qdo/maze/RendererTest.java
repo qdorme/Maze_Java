@@ -39,7 +39,7 @@ public class RendererTest {
     }
 
     @Test
-    public void should_display_a_path() throws IOException {
+    public void should_display_a_square_path() throws IOException {
         // Given
         BufferedImage target = new BufferedImage(40,40,BufferedImage.TYPE_INT_RGB);
         Graphics gTarget = target.getGraphics();
@@ -55,9 +55,9 @@ public class RendererTest {
         MazeFactory factory = new SquareFactory();
         Maze maze = factory.createMaze(2, 2);
         Cells cells = maze.getCells();
-        cells.createPath(1);
-        cells.createPath(2);
-        cells.createPath(3);
+        cells.createPath(cells.getCurrentCell().getNeighbour(1));
+        cells.createPath(cells.getCurrentCell().getNeighbour(2));
+        cells.createPath(cells.getCurrentCell().getNeighbour(3));
         // when
         BufferedImage result = maze.draw();
         // Then
@@ -108,5 +108,66 @@ public class RendererTest {
         BufferedImage result = maze.draw();
         // Then
         Assert.assertTrue(compareImages(target, result));
+    }
+
+    @Test
+    public void should_display_an_haxagon_path() throws IOException {
+        // Given
+        BufferedImage target = new BufferedImage(55,48,BufferedImage.TYPE_INT_RGB);
+        Graphics gTarget = target.getGraphics();
+        gTarget.setColor(Color.WHITE);
+        gTarget.fillRect(0,0,target.getWidth(),target.getHeight());
+        gTarget.setColor(Color.BLACK);
+        gTarget.drawLine(10,14,17,10);
+        gTarget.drawLine(17,10,24,14);
+        gTarget.drawLine(24,14,31,10);
+        gTarget.drawLine(31,10,38,14);
+        gTarget.drawLine(10,14,10,22);
+        gTarget.drawLine(24,14,24,22);
+        gTarget.drawLine(38,14,38,22);
+        gTarget.drawLine(10,22,17,26);
+        gTarget.drawLine(24,22,31,26);
+        gTarget.drawLine(38,22,45,26);
+        gTarget.drawLine(17,26,17,34);
+        gTarget.drawLine(45,26,45,34);
+        gTarget.drawLine(17,34,24,38);
+        gTarget.drawLine(24,38,31,34);
+        gTarget.drawLine(31,34,38,38);
+        gTarget.drawLine(38,38,45,34);
+
+        MazeFactory factory = new HexagonFactory();
+        Maze maze = factory.createMaze(2, 2);
+        Cells cells = maze.getCells();
+        cells.createPath(cells.getCurrentCell().getNeighbour(2));
+        cells.createPath(cells.getCurrentCell().getNeighbour(1));
+        cells.createPath(cells.getCurrentCell().getNeighbour(5));
+        // when
+        BufferedImage result = maze.draw();
+        // Then
+        Assert.assertTrue(compareImages(target, result));
+
+    }
+
+    @Test
+    public void produce_my_path_image() throws IOException {
+
+        MazeFactory factory = new HexagonFactory();
+        Maze maze = factory.createMaze(3, 4);
+        Cells cells = maze.getCells();
+        cells.createPath(cells.getCurrentCell().getNeighbour(1));
+        cells.createPath(cells.getCurrentCell().getNeighbour(1));
+        cells.createPath(cells.getCurrentCell().getNeighbour(2));
+        cells.createPath(cells.getCurrentCell().getNeighbour(3));
+        cells.createPath(cells.getCurrentCell().getNeighbour(2));
+        cells.createPath(cells.getCurrentCell().getNeighbour(4));
+        cells.createPath(cells.getCurrentCell().getNeighbour(4));
+        cells.createPath(cells.getCurrentCell().getNeighbour(5));
+        cells.createPath(cells.getCurrentCell().getNeighbour(0));
+        cells.createPath(cells.getCurrentCell().getNeighbour(1));
+        cells.createPath(cells.getCurrentCell().getNeighbour(3));
+
+        BufferedImage result = maze.draw();
+
+        ImageIO.write(result,"png",new File("/my_path.png"));
     }
 }

@@ -1,29 +1,30 @@
 package qdo.maze;
 
 import lombok.Getter;
-import qdo.maze.exception.InvalidDirectionException;
+import lombok.Setter;
 
 import java.util.List;
 
-
 public class Cells {
-    List<Cell> cells;
+    List<Cell> cellList;
     @Getter
-    Cell currentCell;
+    @Setter
+    private Cell currentCell;
 
     public Cells(List<Cell> cells) {
-        this.cells = cells;
+        this.cellList = cells;
     }
 
     public List<Cell> all() {
-        return cells;
+        return cellList;
     }
 
-    public void setCells(Cell initialCell) {
+    public void setCellList(Cell initialCell) {
         this.currentCell = initialCell;
+        this.currentCell.visited();
     }
 
-    public Cell goTo(int position) throws InvalidDirectionException {
+    public Cell goTo(int position){
         currentCell = currentCell.getNeighbour(position);
         return currentCell;
     }
@@ -33,19 +34,12 @@ public class Cells {
         cell2.makeAcquaintance(cell1);
     }
 
-    public void createPath(Cell cell1, Cell cell2) {
-        cell1.createPath(cell2);
-        cell2.createPath(cell1);
+    public void createPath(Cell to) {
+        Cell from = getCurrentCell();
+        from.createPath(to);
+        to.createPath(from);
+        currentCell=to;
+        to.visited();
     }
-
-    public void createPath(int direction) {
-        Cell start = getCurrentCell();
-        goTo(direction);
-        Cell end = getCurrentCell();
-        start.createPath(end);
-        end.createPath(start);
-    }
-
-
 
 }

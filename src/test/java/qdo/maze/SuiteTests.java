@@ -8,7 +8,8 @@ import org.junit.runners.Suite;
         CellsTest.class,
         SquareMazeFactoryTest.class,
         HexagonMazeFactoryTest.class,
-        RendererTest.class
+        RendererTest.class,
+        MazeTest.class
 })
 public class SuiteTests {
 }

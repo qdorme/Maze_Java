@@ -3,37 +3,56 @@ package qdo.maze;
 
 import lombok.Getter;
 import qdo.maze.exception.InvalidDirectionException;
-import qdo.maze.square.SquareCell;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
 
-@Getter
+
 public abstract class Cell {
     protected Cell[] cells;
-    protected int x,y;
-    protected int[] sides;
+    @Getter protected int x;
+    @Getter protected int y;
+    @Getter protected int[] sides;
+    private boolean visited = false;
 
-    public void setNeighbour(Cell cell, int position){
-        if(position>=cells.length) throw new IllegalArgumentException();
-        if(nonNull(cells[position])) throw new InvalidDirectionException(position);
-        cells[position]=cell;
-    }
-
-    public Cell getNeighbour(int position) throws InvalidDirectionException {
-        if(position>=cells.length) throw new IllegalArgumentException();
-        if(isNull(cells[position])) throw new InvalidDirectionException(position);
+    public Cell getNeighbour(int position) {
+        if (position >= cells.length) throw new IllegalArgumentException();
+        if (isNull(cells[position])) throw new InvalidDirectionException(position);
         return cells[position];
     }
 
     public void makeAcquaintance(Cell newNeighbour) {
-        cells[getIndexNeighbourCell(newNeighbour)]=newNeighbour;
+        cells[getIndexNeighbourCell(newNeighbour)] = newNeighbour;
     }
 
     public void createPath(Cell neighbour) {
-        sides[getIndexNeighbourCell(neighbour)]=0;
+        sides[getIndexNeighbourCell(neighbour)] = 0;
     }
 
-    protected abstract int getIndexNeighbourCell(Cell neighbour);
+    public abstract int getIndexNeighbourCell(Cell neighbour);
 
+    public void visited() {
+        this.visited = true;
+    }
+
+    public boolean isNotVisited() {
+        return !visited;
+    }
+
+    public boolean isVisited() {
+        return visited;
+    }
+
+    public boolean hasUnvisitedNeighbour(){
+        Optional<Cell> any = Arrays.asList(cells).stream().filter(Objects::nonNull).filter(Cell::isNotVisited).findAny();
+        return any.isPresent();
+    }
+
+    public List<Cell> getCells() {
+        return Arrays.asList(cells);
+    }
 }

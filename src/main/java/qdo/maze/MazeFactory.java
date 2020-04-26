@@ -1,8 +1,5 @@
 package qdo.maze;
 
-import qdo.maze.hexagon.HexagonCell;
-
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiFunction;
@@ -10,10 +7,11 @@ import java.util.stream.IntStream;
 
 import static java.util.Objects.nonNull;
 
-public interface MazeFactory {
-    Maze createMaze(int width, int height);
+public abstract class MazeFactory {
+    public abstract Maze createMaze(int width, int height);
+    protected LinkLines linkLines = null;
 
-    default void initCellsForMaze(Maze maze, BiFunction<Integer, Integer, Cell> constructor) {
+    protected void initCellsForMaze(Maze maze, BiFunction<Integer, Integer, Cell> constructor) {
         int lineSize = maze.getWidth();
         int nbLine = maze.getHeight();
         Cells cells = maze.getCells();
@@ -30,17 +28,14 @@ public interface MazeFactory {
                     cells.makeAcquaintance(previous.get(),current);
                 previous.set(current);
             });
-            if(!previousLine.isEmpty()){
-                Iterator<Cell> iteratorPrevious = previousLine.iterator();
-                Iterator<Cell> iteratorCurrent = line.iterator();
-                while(iteratorPrevious.hasNext())
-                    cells.makeAcquaintance(iteratorPrevious.next(),iteratorCurrent.next());
+            if(!previousLine.isEmpty() && nonNull(linkLines)) {
+                linkLines.doIt(cells,previousLine,line);
             }
             previousLine.clear();
             previousLine.addAll(line);
             line.clear();
         });
 
-        cells.setCells(firstCell) ;
+        cells.setCellList(firstCell) ;
     }
 }

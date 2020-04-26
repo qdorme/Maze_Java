@@ -12,7 +12,7 @@ public class SquareCell extends Cell {
     }
 
     @Override
-    protected int getIndexNeighbourCell(Cell neighbour){
+    public int getIndexNeighbourCell(Cell neighbour){
         int diffX = x - neighbour.getX();
         int diffY = y - neighbour.getY();
         if(Math.abs(diffX + diffY) != 1)

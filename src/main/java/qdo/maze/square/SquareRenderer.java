@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage;
 
 import static java.util.Objects.requireNonNull;
 
-public class SquareRenderer extends Renderer {
+public class SquareRenderer implements Renderer {
 
     @Override
     public BufferedImage drawMaze(Maze maze) {
