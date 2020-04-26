@@ -3,7 +3,9 @@ package qdo.maze;
 import org.junit.Assert;
 import org.junit.Test;
 import qdo.maze.hexagon.HexagonFactory;
+import qdo.maze.hexagon.HexagonRenderer;
 import qdo.maze.square.SquareFactory;
+import qdo.maze.square.SquareRenderer;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -33,6 +35,7 @@ public class RendererTest {
         SquareFactory factory = new SquareFactory();
         Maze maze = factory.createMaze(2, 2);
         // when
+        ((SquareRenderer)maze.getRenderer()).setCellSize(10);
         BufferedImage result = maze.draw();
         // Then
         Assert.assertTrue(compareImages(target, result));
@@ -59,6 +62,7 @@ public class RendererTest {
         cells.createPath(cells.getCurrentCell().getNeighbour(2));
         cells.createPath(cells.getCurrentCell().getNeighbour(3));
         // when
+        ((SquareRenderer)maze.getRenderer()).setCellSize(10);
         BufferedImage result = maze.draw();
         // Then
         Assert.assertTrue(compareImages(target, result));

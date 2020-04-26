@@ -1,5 +1,6 @@
 package qdo.maze.square;
 
+import lombok.Setter;
 import qdo.maze.Maze;
 import qdo.maze.Renderer;
 
@@ -8,9 +9,10 @@ import java.awt.image.BufferedImage;
 
 import static java.util.Objects.requireNonNull;
 
+@Setter
 public class SquareRenderer implements Renderer {
 
-    final int cellSize = 12;
+    private int cellSize = 12;
 
     @Override
     public BufferedImage drawMaze(Maze maze) {
