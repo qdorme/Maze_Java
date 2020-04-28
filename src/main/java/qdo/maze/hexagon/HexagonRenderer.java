@@ -34,6 +34,16 @@ public class HexagonRenderer implements Renderer {
                 graphics.drawLine(c.getX() * 14 + 10 + offsetLeft, c.getY() * 12 + 22, c.getX() * 14 + 10 + offsetLeft, c.getY() * 12 + 14);
             if (c.getSides()[5] == -1)
                 graphics.drawLine(c.getX() * 14 + 10 + offsetLeft, c.getY() * 12 + 14, c.getX() * 14 + 17 + offsetLeft, c.getY() * 12 + 10);
+            if (c.isExit()) {
+                graphics.setColor(Color.GREEN);
+                graphics.fillPolygon(
+                        new int[]{c.getX() * 14 + 17 + offsetLeft, c.getX() * 14 + 24 + offsetLeft, c.getX() * 14 + 24 + offsetLeft,
+                                  c.getX() * 14 + 17 + offsetLeft, c.getX() * 14 + 11 + offsetLeft, c.getX() * 14 + 11 + offsetLeft},
+                        new int[]{c.getY() * 12 + 11,c.getY() * 12 + 14,c.getY() * 12 + 22,c.getY() * 12 + 26,c.getY() * 12 + 23,c.getY() * 12 + 14},
+                        6
+                );
+                graphics.setColor(Color.BLACK);
+            }
         });
         return image;
     }

@@ -32,7 +32,13 @@ public class SquareRenderer implements Renderer {
                 graphics.drawLine(c.getX()*cellSize+10,c.getY()*cellSize+(10+cellSize),c.getX()*cellSize+(10+cellSize),c.getY()*cellSize+(10+cellSize));
             if(c.getSides()[3]==-1)
                 graphics.drawLine(c.getX()*cellSize+10,c.getY()*cellSize+10,c.getX()*cellSize+10,c.getY()*cellSize+(10+cellSize));
+            if(c.isExit()){
+                graphics.setColor(Color.GREEN);
+                graphics.fillRect(c.getX()*cellSize+11,c.getY()*cellSize+11,cellSize-1,cellSize-1);
+                graphics.setColor(Color.BLACK);
+            }
         });
+
         return image;
     }
 }

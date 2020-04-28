@@ -16,7 +16,7 @@ public class RunIt {
 
     public static void makeIt(MazeFactory factory, String type) throws IOException {
         Maze maze = factory.createMaze(30, 30);
-        BufferedImage image = maze.generate().draw();
+        BufferedImage image = maze.generate().findExits().draw();
         ImageIO.write(image,"png",new File("/maze_"+type+".png"));
     }
 }

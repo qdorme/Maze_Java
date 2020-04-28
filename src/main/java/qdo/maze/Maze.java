@@ -4,10 +4,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.awt.image.BufferedImage;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Getter
@@ -48,5 +47,32 @@ public abstract class Maze {
                             .findAny();
     }
 
+    public Maze findExits() {
+        cells.setCurrentCell(findOneExit());
+        cells.all().stream().forEach(c-> c.setWeight(0));
+        findOneExit();
+        return this;
+    }
 
+    public Cell findOneExit() {
+        List<Cell> nextGeneration = new LinkedList<>();
+        nextGeneration.add(cells.getCurrentCell());
+        AtomicInteger weight = new AtomicInteger(1);
+        while(!nextGeneration.isEmpty()){
+            List<Cell> tmp = new LinkedList<>();
+            nextGeneration.stream().forEach(c->{
+                c.setWeight(weight.get());
+                c.path().stream().filter(u-> u.getWeight() == 0).forEach(tmp::add);
+            });
+            weight.incrementAndGet();
+            nextGeneration.clear();
+            nextGeneration.addAll(tmp);
+        }
+
+        Optional<Cell> furthest = cells.all().parallelStream().filter(Cell::isBorderCell)
+                .sorted((cell, t1) -> t1.getWeight() - cell.getWeight())
+        .findFirst();
+        furthest.get().setExit(true);
+        return furthest.get();
+    }
 }

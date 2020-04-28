@@ -2,12 +2,10 @@ package qdo.maze;
 
 
 import lombok.Getter;
+import lombok.Setter;
 import qdo.maze.exception.InvalidDirectionException;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 import static java.util.Objects.isNull;
 
@@ -17,7 +15,11 @@ public abstract class Cell {
     @Getter protected int x;
     @Getter protected int y;
     @Getter protected int[] sides;
+    @Getter @Setter private boolean exit = false;
     private boolean visited = false;
+    @Getter
+    private int weight;
+    private Boolean isBorderCell=null;
 
     public Cell getNeighbour(int position) {
         if (position >= cells.length) throw new IllegalArgumentException();
@@ -39,6 +41,10 @@ public abstract class Cell {
         this.visited = true;
     }
 
+    public void unVisited(){
+        this.visited = false;
+    }
+
     public boolean isNotVisited() {
         return !visited;
     }
@@ -53,6 +59,33 @@ public abstract class Cell {
     }
 
     public List<Cell> getCells() {
-        return Arrays.asList(cells);
+        List asList = new LinkedList();
+        for (Cell cell : cells) {
+            if(Objects.nonNull(cell)) asList.add(cell);
+        }
+        return asList;
+    }
+
+    public List<Cell> path(){
+        List<Cell> path = new LinkedList<>();
+        for (int index = 0; index < cells.length ; index++) {
+            if(sides[index] != -1) path.add(cells[index]);
+        }
+        return path;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+        getCells().parallelStream().filter(Cell::isNotVisited).forEach(c->{
+            if(Objects.isNull(c)) System.out.println("c'est tout pourri");
+            if(Objects.nonNull(c)) c.setWeight(weight+1);
+        });
+    }
+
+    public boolean isBorderCell() {
+        if(isBorderCell == null){
+            isBorderCell = getCells().size() != cells.length;
+        }
+        return isBorderCell;
     }
 }
